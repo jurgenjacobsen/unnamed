@@ -1,0 +1,29 @@
+@import 'tailwindcss';
+
+@font-face {
+    font-family: 'Inter';
+    src: url('../fonts/Inter-Regular.ttf');
+}
+
+@font-face {
+    font-family: 'Inter';
+    src: url('../fonts/Inter-Bold.ttf');
+    font-weight: bold;
+}
+
+@font-face {
+    font-family: 'Montserrat Alternate';
+    src: url('../fonts/Montserrat-Alternate.ttf');
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+.cf-mono {
+    font-family: 'Montserrat Alternate', sans-serif;
+}
+
+.cf-def {
+    font-family: 'Inter', sans-serif;
+}
