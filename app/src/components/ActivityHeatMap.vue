@@ -2,14 +2,15 @@
     import { computed } from "vue";
 
     const year = new Date().getFullYear();
+    const firstDayOffset = new Date(year, 0, 1).getDay();
 
-    const dayLabels = ["Mon", "Wed", "Fri"];
+    const dayLabels = ["Sun","Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     const months = [
       "Jan", "Feb", "Mar", "Apr", "May", "Jun",
       "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
     ];
 
-    const legends = ["#ebedf0", "#9be9a8", "#40c463", "#30a14e", "#216e39"];
+    const legends = ["#404040", "#9be9a8", "#40c463", "#30a14e", "#216e39"];
     const activityData = [
         { date: new Date("2025-01-01"), activities: 5 },
         { date: new Date("2025-01-02"), activities: 3 },
@@ -19,7 +20,7 @@
     let populate = true; // Set to false to disable random data
     if(populate) {
         for (let i = 0; i < 150; i++) {
-        const date = new Date(year, 0, i + 1);
+        const date = new Date(year, 0, Math.random() * 365); // Random date in the year
         const activities = Math.floor(Math.random() * 21); // Random contributions between 0 and 20
         activityData.push({ date, activities });
         }
@@ -66,72 +67,6 @@
         if (activities < 20) return legends[3];
         return legends[4];
     }
-
-  /*
-  // Example contribution data (replace with your actual data source)
-  const contributionData: any[] = [
-    //{ date: "2025-01-01", contributions: 5 },
-    //{ date: "2025-01-02", contributions: 3 },
-    // Fill with 365 days of data or fetch dynamically
-  ];
-  
-  // Generate days of the year
-  const year = new Date().getFullYear();
-  const daysInYear = Array.from({ length: 365 }, (_, i) => {
-    const date = new Date(year, 0, i + 1);
-    const isoDate = date.toISOString().split("T")[0];
-    return { date: isoDate, day: date.getDay(), contributions: 0 };
-  });
-  
-  // Map contributions to the days
-  contributionData.forEach((entry) => {
-    const day = daysInYear.find((d) => d.date === entry.date);
-    if (day) day.contributions = entry.contributions;
-  });
-  
-  // Generate grid
-  const grid = computed(() => {
-    const gridData = [];
-    for (let i = 0; i < daysInYear.length; i++) {
-      gridData.push(daysInYear[i]);
-    }
-    return gridData;
-  });
-  
-  // Generate months for labels
-  const months = computed(() => {
-    const monthNames = [
-      "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-      "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
-    ];
-    const startDays: any[] = [];
-    let currentMonth = 0;
-  
-    daysInYear.forEach((day, index) => {
-      const month = new Date(day.date).getMonth();
-      if (month !== currentMonth) {
-        startDays.push({ name: monthNames[month], start: index / 7 + 1 });
-        currentMonth = month;
-      }
-    });
-  
-    return startDays;
-  });
-  
-  // Labels for days (left side)
-  const dayLabels = ["Mon", "Wed", "Fri"];
-  
-  // Legend colors
-  const legendColors = ["#ebedf0", "#9be9a8", "#40c463", "#30a14e", "#216e39"];
-  
-  // Function to get the cell color based on contributions
-  function getColor(contributions: number) {
-    if (contributions === 0) return legendColors[0];
-    if (contributions < 5) return legendColors[1];
-    if (contributions < 10) return legendColors[2];
-    if (contributions < 20) return legendColors[3];
-    return legendColors[4];
-  }*/
 </script>
 
 <template>
@@ -140,7 +75,8 @@
 
         <div class="grid grid-cols-32">
             <div class="col-span-1">
-                <div class="flex flex-col justify-between h-28 mt-4">
+              <!--flex flex-col justify-between h-28 mt-4-->
+                <div class="grid grid-cols-1 grid-rows-7 mt-4">
                     <div v-for="day in dayLabels" :key="day" class="text-xs opacity-50">{{ day }}</div>
                 </div>
             </div>
@@ -160,13 +96,17 @@
                 </div>
 
                 <div class="grid grid-cols-53 grid-rows-7 gap-1">
-                <div
-                    v-for="(day, index) in activityGrid"
-                    :key="index"
-                    class="w-3 h-3 rounded-xs"
-                    :title="`${day.date}: ${day.activities} activities`"
-                    :style="{ backgroundColor: getColor(day.activities) }"
-                ></div>
+                  <div
+                      v-for="(day, index) in activityGrid"
+                      :key="index"
+                      class="w-3 h-3 rounded-xs"
+                      :title="`${day.date}: ${day.activities} activities`"
+                      :style="{ 
+                        backgroundColor: getColor(day.activities), 
+                        gridColumn: Math.floor((index + firstDayOffset) / 7) + 1, 
+                        gridRow: ((index + firstDayOffset) % 7) + 1 
+                      }">
+                  </div>
                 </div>
 
                 <div>
