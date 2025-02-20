@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import ActivityHeatMap from './components/ActivityHeatMap.vue';
+import ActivityHeatMap from './components/ActivityHeatMap.vue'
+import Goals from './components/Goals.vue'
 import Pomodoro from './components/Pomodoro.vue'
 import Water from './components/Water.vue'
 import Weather from './components/Weather.vue'
@@ -25,7 +26,8 @@ import Weather from './components/Weather.vue'
             />
         </div>
         <div class="col-span-2">
-            <ActivityHeatMap/>
+            <ActivityHeatMap />
+            <Goals class="mt-4" />
         </div>
     </div>
 </template>
