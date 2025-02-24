@@ -9,7 +9,7 @@ import Weather from './components/Weather.vue'
 <template>
     <div class="grid grid-cols-3 gap-4 mt-4">
         <div class="col-span-1">
-            <Water goal="5000" progress="2500" format="ml" />
+            <Water goal="5000" progress="0" format="ml" />
 
             <Weather
                 class="mt-4"

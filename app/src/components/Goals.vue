@@ -12,9 +12,9 @@ const goals = [
 
 const years = [
     {
-        year: 2024,
+        year: 2025,
         goals: [
-            { q: 1, objective: '1' },
+            { q: 1, objective: 'Lorem ipsum caralius omigus tudus' }, // Lorem ipsum caralius omigus tudus
             { q: 1, objective: '2' },
             { q: 1, objective: '3' },
             { q: 2, objective: '4' },
@@ -22,12 +22,11 @@ const years = [
             { q: 3, objective: '5' },
             { q: 2, objective: '3' },
             { q: 1, objective: '4' },
-            { q: 4, objective: '4' },
-            { q: 3, objective: '5' },
+            { q: 4, objective: 'Finish Course' },
         ]
     },
     {
-        year: 2025,
+        year: 2026,
         goals: [
             { q: 2, objective: '6' },
             { q: 2, objective: '7' },
@@ -35,7 +34,7 @@ const years = [
         ]
     },
     {
-        year: 2026,
+        year: 2027,
         goals: [
             { q: 3, objective: '6' },
             { q: 2, objective: '7' },

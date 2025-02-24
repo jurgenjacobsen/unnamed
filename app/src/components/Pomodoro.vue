@@ -95,7 +95,14 @@ onUnmounted(() => {
         class="p-4 ring-1 ring-neutral-300/50 dark:ring-neutral-700/50 rounded-md"
     >
         <div class="flex justify-between">
-            <span class="font-semibold opacity-75">Pomodoro Session</span>
+            <span class="font-semibold opacity-75">Pomodoro Session
+                <span
+                    v-show="isBreak"
+                    class="ml-3 p-0.5 px-2 bg-neutral-500/25 ring-1 ring-neutral-300/50 dark:ring-neutral-500/50 rounded-md opacity-50 font-normal text-sm"
+                    >Break</span
+                >
+            </span>
+            
             <span class="opacity-25">{{
                 pomodoroCount > 0 ? `${pomodoroCount} Completed` : ''
             }}</span>
@@ -105,11 +112,7 @@ onUnmounted(() => {
                 <span class="cf-mono font-semibold text-3xl">
                     {{ timerDisplay }}
                 </span>
-                <span
-                    v-show="isBreak"
-                    class="ml-3 p-0.5 px-2 bg-neutral-500/25 ring-1 ring-neutral-300/50 dark:ring-neutral-500/50 rounded-md"
-                    >Break</span
-                >
+                
             </div>
 
             <div class="col-span-2 grid grid-cols-3 gap-2">
