@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import beepSound from '/sounds/beep.mp3'
 
 const props = defineProps<{
@@ -20,6 +20,7 @@ const isPomodoro = ref(true) // True for Pomodoro session, false for break
 const isRunning = ref(false)
 const isBreak = ref(false)
 const pomodoroCount = ref(0)
+const startTime = ref<number | null>(null)
 
 const timerDisplay = computed(() => {
     const minutes = Math.floor(timer.value / 60)
@@ -34,12 +35,13 @@ function startTimer() {
     if (isRunning.value) return
     isRunning.value = true
 
+    startTime.value = Date.now() - (isPomodoro.value ? pomodoroDuration - timer.value : breakDuration - timer.value) * 1000
+
     intervalId = setInterval(() => {
-        if (timer.value > 0) {
-            timer.value--
-        } else {
-            toggleSession()
-        }
+        const elapsed = Math.floor((Date.now() - (startTime.value || 0)) / 1000)
+        timer.value = Math.max((isPomodoro.value ? pomodoroDuration : breakDuration) - elapsed, 0)
+
+        if (timer.value === 0) toggleSession()
     }, 1000)
 }
 
@@ -51,24 +53,21 @@ function stopTimer() {
 function resetTimer(byUserAction = false) {
     stopTimer()
     if (byUserAction) {
-        isPomodoro.value = true // Reset to initial Pomodoro state
-        isBreak.value = false // Ensure it’s not in break mode
-        timer.value = pomodoroDuration // Reset timer to initial Pomodoro duration
-        isRunning.value = false // Ensure the timer is stopped
+        isPomodoro.value = true
+        isBreak.value = false
+        timer.value = pomodoroDuration
+        isRunning.value = false
     } else {
         timer.value = isPomodoro.value ? pomodoroDuration : breakDuration
     }
 }
 
 function toggleSession() {
-    if (isPomodoro.value) {
-        // Increment Pomodoro count if transitioning from Pomodoro to break
-        pomodoroCount.value++
-    }
+    if (isPomodoro.value) pomodoroCount.value++
 
     isPomodoro.value = !isPomodoro.value
-    timer.value = isPomodoro.value ? pomodoroDuration : breakDuration
     isBreak.value = !isBreak.value
+    timer.value = isPomodoro.value ? pomodoroDuration : breakDuration
 
     if (props.beepSound) {
         try {
@@ -82,8 +81,12 @@ function toggleSession() {
 }
 
 onMounted(() => {
-    timer.value = pomodoroDuration // Set to Pomodoro duration initially
+    timer.value = pomodoroDuration
     beep = new Audio(beepSound)
+})
+
+onUnmounted(() => {
+    clearInterval(intervalId)
 })
 </script>
 
@@ -115,7 +118,7 @@ onMounted(() => {
                     @click="startTimer"
                     :disabled="isRunning"
                 >
-                    Start
+                    {{ isRunning ? 'Running' : 'Start' }}
                 </button>
                 <button
                     class="bg-red-700 rounded-md px-4 py-1 cursor-pointer hover:opacity-75 duration-150"
