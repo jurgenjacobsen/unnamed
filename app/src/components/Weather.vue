@@ -75,6 +75,10 @@ watch(
     () => props,
     () => {
         getWeather()
+
+        setInterval(() => {
+            getWeather()
+        }, 10 * 60 * 1000)
     },
     { immediate: true },
 )

@@ -13,7 +13,7 @@ import Weather from './components/Weather.vue'
 
             <Weather
                 class="mt-4"
-                location="Póvoa de Varzim"
+                location="Porto, Portugal"
                 timeFormat="24H"
                 tempFormat="metric"
             />
